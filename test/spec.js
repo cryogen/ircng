@@ -166,6 +166,22 @@ describe('Pushing a string', function() {
         });
     });
 
+    describe('with a message with no source and a single parameter', function() {
+        it('should raise a message event with a single parameter', function() {
+            var spy = sinon.spy();
+            var stream = new IRCStream();
+
+            stream.on('message', spy);
+
+            stream.push('COMMAND1 argument1\r\n');
+
+            sinon.assert.calledOnce(spy);
+
+            var returnedCommand = spy.getCall(0);
+            expect(returnedCommand.args[0]).to.have.property('args').to.be.instanceof(Array);
+        });
+    })
+
     describe('with a message with no source and multiple parameters', function() {
         it('should raise a message event with multiple parameters', function() {
             var spy = sinon.spy();
@@ -178,6 +194,7 @@ describe('Pushing a string', function() {
             sinon.assert.calledOnce(spy);
 
             var returnedCommand = spy.getCall(0);
+            
             expect(returnedCommand.args[0]).to.have.property('args').that.include('argument1');
             expect(returnedCommand.args[0]).to.have.property('args').that.include('argument2');
             expect(returnedCommand.args[0]).to.have.property('args').that.include('argument3');
@@ -233,6 +250,26 @@ describe('Pushing a string', function() {
             expect(returnedCommand.args[0]).to.have.property('args').that.include('argument1 argument2');
         });
     });
+
+    describe('with a message with a source and a colon parameter that is not the first', function() {
+        it('should raise a message with the colon parameter joined to the rest', function() {
+            var spy = sinon.spy();
+            var stream = new IRCStream();
+
+            stream.on('message', spy);
+
+            stream.push('COMMAND1 argument1 :argument2 argument3\r\n');
+
+            sinon.assert.calledOnce(spy);
+
+            var returnedCommand = spy.getCall(0);
+
+            console.info(returnedCommand.args[0].args);
+            
+            expect(returnedCommand.args[0]).to.have.property('args').that.include('argument1');
+            expect(returnedCommand.args[0]).to.have.property('args').that.include('argument2 argument3');
+        });
+    });
 });
 
 describe('Calling register', function() {
@@ -268,4 +305,3 @@ describe('Calling register', function() {
         });
     })
 });
-
