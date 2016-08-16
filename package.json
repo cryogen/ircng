@@ -1,0 +1,25 @@
+{
+  "name": "ircng",
+  "version": "0.0.1",
+  "description": "Yet another javascript IRC library",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha tests/spec.js"
+  },
+  "keywords": [
+    "irc",
+    "stream",
+    "parser"
+  ],
+  "author": "Stuart Walsh <stu@ipng.org.uk>",
+  "license": "MIT",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "browserify": "^13.1.0",
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2",
+    "sinon": "^1.17.5",
+    "sinon-mongoose": "^1.2.1"
+  }
+}
