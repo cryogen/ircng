@@ -3,6 +3,10 @@
   "version": "0.0.2",
   "description": "Yet another javascript IRC library",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cryogen/ircng.git"
+  },
   "scripts": {
     "test": "mocha tests/spec.js"
   },
