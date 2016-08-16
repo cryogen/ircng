@@ -18,11 +18,16 @@ function processMessage(line) {
         command = split[0];
     }
 
-    if(split[argIndex][0] === ':') {
-        split[argIndex] = split[argIndex].slice(1);
-        args = (split.slice(argIndex).join(' '));
-    } else {
-        args = split.slice(argIndex);
+    for(var i = argIndex; i < split.length; i++) {
+        var currentArg = split[i];
+
+        if(currentArg[0] === ':') {
+            split[i] = split[i].slice(1);
+            args.push(split.slice(i).join(' '));
+            break;
+        } else {
+            args.push(currentArg);
+        }
     }
 
     return {
