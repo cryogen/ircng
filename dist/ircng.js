@@ -5,10 +5,30 @@ const EventEmitter = require('events');
 
 function processMessage(line) {
     var split = line.split(' ');
+    var command = '';
+    var source = undefined;
+    var argIndex = 1;
+    var args = [];
+
+    if(split[0][0] === ':') {
+        source = split[0].slice(1);
+        command = split[1];
+        argIndex++;
+    } else {
+        command = split[0];
+    }
+
+    if(split[argIndex][0] === ':') {
+        split[argIndex] = split[argIndex].slice(1);
+        args = (split.slice(argIndex).join(' '));
+    } else {
+        args = split.slice(argIndex);
+    }
 
     return {
-        command: split[0],
-        args: split[1]
+        source: source,
+        command: command,
+        args: args
     };
 }
 
