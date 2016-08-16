@@ -96,6 +96,25 @@ describe('Pushing a string', function() {
         });
     });
 
+    describe('with two CRs', function() {
+        it('should raise two message events, with both commands in', function() {
+            var spy = sinon.spy();
+            var stream = new IRCStream();
+
+            stream.on('message', spy);
+
+            stream.push("COMMAND1 argument1\nCOMMAND2 argument2\n");
+
+            sinon.assert.calledTwice(spy);
+
+            var returnedCommand = spy.getCall(0);
+            expect(returnedCommand.args[0]).to.have.property('command').that.equals('COMMAND1');
+
+            returnedCommand = spy.getCall(1);
+            expect(returnedCommand.args[0]).to.have.property('command').that.equals('COMMAND2');
+        });
+    });
+
     describe('with CRLF over two messages', function() {
         it('should raise a message event', function() {
             var spy = sinon.spy();

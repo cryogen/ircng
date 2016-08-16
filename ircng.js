@@ -25,10 +25,9 @@ class IRCStream extends EventEmitter {
         var currentIndex = 0;
 
         this._buffer += message;
-
         var buffer = this._buffer;
 
-        while(currentIndex < buffer.length) {
+        while(currentIndex <= buffer.length) {
             var newLineIndex = buffer.indexOf('\n', currentIndex);
             
             if(newLineIndex === -1) {
@@ -41,15 +40,18 @@ class IRCStream extends EventEmitter {
 
             if(buffer[newLineIndex - 1] === '\r') {
                 messageLength--;
-                currentIndex++;
             }
 
             var line = buffer.substr(lastIndex, messageLength);
-            this._buffer = buffer.slice(line.length);
+            buffer = buffer.slice(currentIndex + 1);
             var command = processMessage(line);
 
             this.emit('message', command);
+
+            currentIndex = 0;
         }
+
+        this._buffer = buffer;
     }
 }
 

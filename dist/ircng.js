@@ -1,6 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-
-},{}],2:[function(require,module,exports){
+require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
 const EventEmitter = require('events');
@@ -28,10 +26,9 @@ class IRCStream extends EventEmitter {
         var currentIndex = 0;
 
         this._buffer += message;
-
         var buffer = this._buffer;
 
-        while(currentIndex < buffer.length) {
+        while(currentIndex <= buffer.length) {
             var newLineIndex = buffer.indexOf('\n', currentIndex);
             
             if(newLineIndex === -1) {
@@ -44,20 +41,23 @@ class IRCStream extends EventEmitter {
 
             if(buffer[newLineIndex - 1] === '\r') {
                 messageLength--;
-                currentIndex++;
             }
 
             var line = buffer.substr(lastIndex, messageLength);
-            this._buffer = buffer.slice(line.length);
+            buffer = buffer.slice(currentIndex + 1);
             var command = processMessage(line);
 
             this.emit('message', command);
+
+            currentIndex = 0;
         }
+
+        this._buffer = buffer;
     }
 }
 
 module.exports = IRCStream;
-},{"events":3}],3:[function(require,module,exports){
+},{"events":2}],2:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -361,4 +361,9 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}]},{},[1,2]);
+},{}],"ircng":[function(require,module,exports){
+var IRCStream = require('./ircng.js');
+
+module.exports = IRCStream;
+
+},{"./ircng.js":1}]},{},[]);
