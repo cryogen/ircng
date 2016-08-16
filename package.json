@@ -1,6 +1,6 @@
 {
   "name": "ircng",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Yet another javascript IRC library",
   "main": "index.js",
   "scripts": {
@@ -13,8 +13,7 @@
   ],
   "author": "Stuart Walsh <stu@ipng.org.uk>",
   "license": "MIT",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "browserify": "^13.1.0",
     "chai": "^3.5.0",
