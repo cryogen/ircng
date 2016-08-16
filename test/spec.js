@@ -132,6 +132,23 @@ describe('Pushing a string', function() {
         })
     });
 
+    describe('twice with valid messages', function() {
+        it('should raise two seperate messages', function() {
+            var spy = sinon.spy();
+            var stream = new IRCStream();
+
+            stream.on('message', spy);
+
+            stream.push('COMMAND argument\r\n');
+            stream.push('COMMAND2 argument2\r\n');
+
+            sinon.assert.calledTwice(spy);
+
+            expect(spy.getCall(0).args[0]).to.have.property('command').that.equals('COMMAND');
+            expect(spy.getCall(1).args[0]).to.have.property('command').that.equals('COMMAND2');
+        });
+    });
+
     describe('with a source', function() {
         it('should raise a message with the source set', function() {
             var spy = sinon.spy();
@@ -149,7 +166,7 @@ describe('Pushing a string', function() {
         });
     });
 
-    describe('a message with no source and multiple parameters', function() {
+    describe('with a message with no source and multiple parameters', function() {
         it('should raise a message event with multiple parameters', function() {
             var spy = sinon.spy();
             var stream = new IRCStream();
@@ -167,7 +184,7 @@ describe('Pushing a string', function() {
         });
     });
 
-    describe('a message with a source and multiple parameters', function() {
+    describe('with a message with a source and multiple parameters', function() {
         it('should raise a message event with multiple parameters', function() {
             var spy = sinon.spy();
             var stream = new IRCStream();
@@ -185,7 +202,7 @@ describe('Pushing a string', function() {
         });
     });
 
-    describe('a message with no source and a colon parameter', function() {
+    describe('with a message with no source and a colon parameter', function() {
         it('should raise a message event with one parameter', function() {
             var spy = sinon.spy();
             var stream = new IRCStream();
@@ -201,7 +218,7 @@ describe('Pushing a string', function() {
         });
     });
 
-    describe('a message with a source and a colon parameter', function() {
+    describe('with a message with a source and a colon parameter', function() {
         it('should raise a message event with one parameter', function() {
             var spy = sinon.spy();
             var stream = new IRCStream();
@@ -216,5 +233,39 @@ describe('Pushing a string', function() {
             expect(returnedCommand.args[0]).to.have.property('args').that.include('argument1 argument2');
         });
     });
+});
+
+describe('Calling register', function() {
+    describe('with no arguments', function() {
+        it('should register with defaults', function() {
+            var spy = sinon.spy();
+            var stream = new IRCStream();
+
+            stream.on('send', spy);
+
+            stream.register();
+
+            sinon.assert.calledTwice(spy);
+
+            expect(spy.getCall(0).args[0]).to.have.property('message').that.equals('USER WebIRC * * :WebIRC User\r\n');
+            expect(spy.getCall(1).args[0]).to.have.property('message').that.equals('NICK WebIRC\r\n');
+        });
+    });
+
+    describe('with arguments specified', function () {
+        it('should register with specified details', function() {
+            var spy = sinon.spy();
+            var stream = new IRCStream();
+
+            stream.on('send', spy);
+
+            stream.register({ nick: 'TestNick', username: 'TestUser', realname: 'TestReal' });
+
+            sinon.assert.calledTwice(spy);
+
+            expect(spy.getCall(0).args[0]).to.have.property('message').that.equals('USER TestUser * * :TestReal\r\n');
+            expect(spy.getCall(1).args[0]).to.have.property('message').that.equals('NICK TestNick\r\n');
+        });
+    })
 });
 

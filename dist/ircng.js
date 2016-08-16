@@ -70,9 +70,20 @@ class IRCStream extends EventEmitter {
             this.emit('message', command);
 
             currentIndex = 0;
+
+            if(buffer.length === 0) {
+                break;
+            }
         }
 
         this._buffer = buffer;
+    }
+
+    register(params) {
+        params = params || {};
+
+        this.emit('send', { message: 'USER ' + (params.username || 'WebIRC') + ' * * :' + (params.realname || 'WebIRC User') + '\r\n'});
+        this.emit('send', { message: 'NICK ' + (params.nick || 'WebIRC') + '\r\n'});
     }
 }
 
