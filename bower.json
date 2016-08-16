@@ -1,0 +1,23 @@
+{
+  "name": "ircng",
+  "description": "Yet another javascript IRC library",
+  "main": "index.js",
+  "authors": [
+    "Stuart Walsh <stu@ipng.org.uk>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "irc",
+    "stream",
+    "parser"
+  ],
+  "homepage": "https://github.com/cryogen/ircng",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "version": "0.0.1"
+}
