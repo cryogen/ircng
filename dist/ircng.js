@@ -56,6 +56,10 @@ function handleCommand(stream, command) {
     }
 }
 
+function buildCommand(message) {
+    return { message: message + '\r\n' };
+}
+
 class IRCStream extends EventEmitter {
     constructor() {
         super();
@@ -108,8 +112,16 @@ class IRCStream extends EventEmitter {
     register(params) {
         params = params || {};
 
-        this.emit('send', { message: 'USER ' + (params.username || 'WebIRC') + ' * * :' + (params.realname || 'WebIRC User') + '\r\n'});
-        this.emit('send', { message: 'NICK ' + (params.nick || 'WebIRC') + '\r\n'});
+        this.emit('send', buildCommand('USER ' + (params.username || 'WebIRC') + ' * * :' + (params.realname || 'WebIRC User')));
+        this.emit('send', buildCommand('NICK ' + (params.nick || 'WebIRC')));
+    }
+
+    setNickname(newNickname) {
+        if(!newNickname) {
+            return;
+        }
+
+        this.emit('send', buildCommand('NICK ' + newNickname));
     }
 }
 
