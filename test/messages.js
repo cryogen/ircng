@@ -36,4 +36,17 @@ describe('receiving a numeric message', function() {
         expect(returnedCommand.args[0]).to.have.property('args').that.include('target');
         expect(returnedCommand.args[0]).to.have.property('args').that.include('Error stuff');
     });
-})
+});
+
+describe('receiving a JOIN message', function() {
+    it('should raise a join event', function() {
+        stream.on('join', spy);
+        stream.push(':nick!user@host JOIN :#test\r\n');
+
+        sinon.assert.calledOnce(spy);
+
+        var returnedCommand = spy.getCall(0);
+        expect(returnedCommand.args[0]).to.have.property('source').that.equals('nick!user@host');
+        expect(returnedCommand.args[0]).to.have.property('channel').that.equals('#test');
+    });
+});

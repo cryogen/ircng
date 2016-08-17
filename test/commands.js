@@ -32,3 +32,24 @@ describe('calling setNickname', function() {
         });
     });
 });
+
+describe('calling joinChannel', function() {
+    describe('with no arguments', function() {
+        it('should send no messages', function() {
+            stream.on('send', spy);
+            stream.joinChannel();
+
+            sinon.assert.notCalled(spy);
+        });
+    });
+
+    describe('with no leading #', function() {
+        it('should send a message to join the channel and add a # to the name', function() {
+            stream.on('send', spy);
+            stream.joinChannel('test');
+
+            sinon.assert.calledOnce(spy);
+            expect(spy.getCall(0).args[0]).to.have.property('message').that.equals('JOIN #test\r\n');
+        });
+    });
+});
