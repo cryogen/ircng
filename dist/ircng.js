@@ -53,6 +53,9 @@ function handleCommand(stream, command) {
         case 'PING':
             stream.emit('send', { message: 'PONG ' + command.args[0] + '\r\n' });
             break
+        case 'JOIN':
+            stream.emit('join', { source: command.source, channel: command.args[0]} );
+            break;
     }
 }
 
@@ -122,6 +125,18 @@ class IRCStream extends EventEmitter {
         }
 
         this.emit('send', buildCommand('NICK ' + newNickname));
+    }
+
+    joinChannel(channel) {
+        if(!channel) {
+            return;
+        }
+
+        if(!channel.startsWith('#')) {
+            channel = '#' + channel;
+        }
+
+        this.emit('send', buildCommand('JOIN ' + channel));
     }
 }
 
