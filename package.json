@@ -1,6 +1,6 @@
 {
   "name": "ircng",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Yet another javascript IRC library",
   "main": "index.js",
   "repository": {
