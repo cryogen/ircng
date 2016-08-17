@@ -2,7 +2,7 @@
 
 const EventEmitter = require('events');
 
-function processMessage(line) {
+function parseMessage(line) {
     var split = line.split(' ');
     var command = '';
     var source = undefined;
@@ -34,6 +34,14 @@ function processMessage(line) {
         command: command,
         args: args
     };
+}
+
+function handleCommand(stream, command) {
+    switch(command.command) {
+        case 'PING':
+            stream.emit('send', { message: 'PONG ' + command.args[0] + '\r\n' });
+            break
+    }
 }
 
 class IRCStream extends EventEmitter {
@@ -69,7 +77,9 @@ class IRCStream extends EventEmitter {
 
             var line = buffer.substr(lastIndex, messageLength);
             buffer = buffer.slice(currentIndex + 1);
-            var command = processMessage(line);
+            var command = parseMessage(line);
+
+            handleCommand(this, command);
 
             this.emit('message', command);
 
