@@ -36,7 +36,18 @@ function parseMessage(line) {
     };
 }
 
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
 function handleCommand(stream, command) {
+    if(isNumber(command.command)) {
+        stream.emit(command.command, { 
+            numeric: command.command, 
+            args: command.args 
+        });
+    }
+
     switch(command.command) {
         case 'PING':
             stream.emit('send', { message: 'PONG ' + command.args[0] + '\r\n' });
