@@ -4,13 +4,17 @@ var expect = chai.expect;
 
 var IRCStream = require('../ircng');
 
+var stream = {};
+var spy = {};
+
+beforeEach(function() {
+    spy = sinon.spy();
+    stream = new IRCStream();
+});
+
 describe('receiving a PING message', function() {
     it('should send a PONG with the parameter received', function() {
-        var spy = sinon.spy();
-        var stream = new IRCStream();
-
         stream.on('send', spy);
-
         stream.push('PING test\r\n');
 
         sinon.assert.calledOnce(spy);
@@ -22,11 +26,7 @@ describe('receiving a PING message', function() {
 
 describe('receiving a numeric message', function() {
     it('should raise an event with the numeric', function() {
-        var spy = sinon.spy();
-        var stream = new IRCStream();
-
         stream.on('433', spy);
-
         stream.push(':source 433 * target :Error stuff\r\n');
 
         sinon.assert.calledOnce(spy);

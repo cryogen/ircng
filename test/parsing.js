@@ -4,14 +4,19 @@ var expect = chai.expect;
 
 var IRCStream = require('../ircng');
 
+var stream = {};
+var spy = {};
+
+beforeEach(function() {
+    spy = sinon.spy();
+    stream = new IRCStream();
+
+    stream.on('message', spy);
+});
+
 describe('Pushing a string', function() {
     describe('that is undefined', function() {
         it('should not raise a message event', function() {
-            var spy = sinon.spy();
-            var stream = new IRCStream();
-
-            stream.on('message', spy);
-
             stream.push();
 
             sinon.assert.notCalled(spy);
@@ -20,11 +25,6 @@ describe('Pushing a string', function() {
 
     describe('that is not a string', function() {
         it('should not raise a message event', function() {
-            var spy = sinon.spy();
-            var stream = new IRCStream();
-
-            stream.on('message', spy);
-
             stream.push(1);
 
             sinon.assert.notCalled(spy);
@@ -33,11 +33,6 @@ describe('Pushing a string', function() {
 
     describe('with no CR or LF characters', function() {
         it('should not raise a message event', function() {
-            var spy = sinon.spy();
-            var stream = new IRCStream();
-
-            stream.on('message', spy);
-
             stream.push('TEST DATA NOT CONTAINING CR OR LF');
 
             sinon.assert.notCalled(spy);
@@ -46,11 +41,6 @@ describe('Pushing a string', function() {
 
     describe('with one CRLF in it', function() {
         it('should raise a message event with one command', function() {
-            var spy = sinon.spy();
-            var stream = new IRCStream();
-
-            stream.on('message', spy);
-
             stream.push('COMMAND argument\r\n');
 
             sinon.assert.calledOnce(spy);
@@ -63,11 +53,6 @@ describe('Pushing a string', function() {
 
     describe('with one CR and no LF', function() {
         it('should raise a message event with one command', function() {
-            var spy = sinon.spy();
-            var stream = new IRCStream();
-
-            stream.on('message', spy);
-
             stream.push('COMMAND argument\r\n');
 
             sinon.assert.calledOnce(spy);
@@ -79,11 +64,6 @@ describe('Pushing a string', function() {
 
     describe('with two CRLFs', function() {
         it('should raise two message events, with both commands in', function() {
-            var spy = sinon.spy();
-            var stream = new IRCStream();
-
-            stream.on('message', spy);
-
             stream.push('COMMAND1 argument1\r\nCOMMAND2 argument2\r\n');
 
             sinon.assert.calledTwice(spy);
@@ -98,11 +78,6 @@ describe('Pushing a string', function() {
 
     describe('with two CRs', function() {
         it('should raise two message events, with both commands in', function() {
-            var spy = sinon.spy();
-            var stream = new IRCStream();
-
-            stream.on('message', spy);
-
             stream.push('COMMAND1 argument1\nCOMMAND2 argument2\n');
 
             sinon.assert.calledTwice(spy);
@@ -117,11 +92,6 @@ describe('Pushing a string', function() {
 
     describe('with CRLF over two messages', function() {
         it('should raise a message event', function() {
-            var spy = sinon.spy();
-            var stream = new IRCStream();
-
-            stream.on('message', spy);
-
             stream.push('COMMAND1 arg');
             stream.push('ument\r\n');
 
@@ -134,11 +104,6 @@ describe('Pushing a string', function() {
 
     describe('twice with valid messages', function() {
         it('should raise two seperate messages', function() {
-            var spy = sinon.spy();
-            var stream = new IRCStream();
-
-            stream.on('message', spy);
-
             stream.push('COMMAND argument\r\n');
             stream.push('COMMAND2 argument2\r\n');
 
@@ -151,11 +116,6 @@ describe('Pushing a string', function() {
 
     describe('with a source', function() {
         it('should raise a message with the source set', function() {
-            var spy = sinon.spy();
-            var stream = new IRCStream();
-
-            stream.on('message', spy);
-
             stream.push(':source COMMAND1 argument\r\n');
 
             sinon.assert.calledOnce(spy);
@@ -168,11 +128,6 @@ describe('Pushing a string', function() {
 
     describe('with a message with no source and a single parameter', function() {
         it('should raise a message event with a single parameter', function() {
-            var spy = sinon.spy();
-            var stream = new IRCStream();
-
-            stream.on('message', spy);
-
             stream.push('COMMAND1 argument1\r\n');
 
             sinon.assert.calledOnce(spy);
@@ -184,11 +139,6 @@ describe('Pushing a string', function() {
 
     describe('with a message with no source and multiple parameters', function() {
         it('should raise a message event with multiple parameters', function() {
-            var spy = sinon.spy();
-            var stream = new IRCStream();
-
-            stream.on('message', spy);
-
             stream.push('COMMAND1 argument1 argument2 argument3\r\n');
 
             sinon.assert.calledOnce(spy);
@@ -203,11 +153,6 @@ describe('Pushing a string', function() {
 
     describe('with a message with a source and multiple parameters', function() {
         it('should raise a message event with multiple parameters', function() {
-            var spy = sinon.spy();
-            var stream = new IRCStream();
-
-            stream.on('message', spy);
-
             stream.push(':source COMMAND1 argument1 argument2 argument3\r\n');
 
             sinon.assert.calledOnce(spy);
@@ -221,11 +166,6 @@ describe('Pushing a string', function() {
 
     describe('with a message with no source and a colon parameter', function() {
         it('should raise a message event with one parameter', function() {
-            var spy = sinon.spy();
-            var stream = new IRCStream();
-
-            stream.on('message', spy);
-
             stream.push('COMMAND1 :argument1 argument2\r\n');
 
             sinon.assert.calledOnce(spy);
@@ -237,11 +177,6 @@ describe('Pushing a string', function() {
 
     describe('with a message with a source and a colon parameter', function() {
         it('should raise a message event with one parameter', function() {
-            var spy = sinon.spy();
-            var stream = new IRCStream();
-
-            stream.on('message', spy);
-
             stream.push(':source COMMAND1 :argument1 argument2\r\n');
 
             sinon.assert.calledOnce(spy);
@@ -253,11 +188,6 @@ describe('Pushing a string', function() {
 
     describe('with a message with a source and a colon parameter that is not the first', function() {
         it('should raise a message with the colon parameter joined to the rest', function() {
-            var spy = sinon.spy();
-            var stream = new IRCStream();
-
-            stream.on('message', spy);
-
             stream.push('COMMAND1 argument1 :argument2 argument3\r\n');
 
             sinon.assert.calledOnce(spy);

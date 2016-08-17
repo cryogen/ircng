@@ -4,14 +4,18 @@ var expect = chai.expect;
 
 var IRCStream = require('../ircng');
 
+var stream = {};
+var spy = {};
+
+beforeEach(function() {
+    spy = sinon.spy();
+    stream = new IRCStream();
+});
+
 describe('Calling register', function() {
     describe('with no arguments', function() {
         it('should register with defaults', function() {
-            var spy = sinon.spy();
-            var stream = new IRCStream();
-
             stream.on('send', spy);
-
             stream.register();
 
             sinon.assert.calledTwice(spy);
@@ -23,11 +27,7 @@ describe('Calling register', function() {
 
     describe('with arguments specified', function () {
         it('should register with specified details', function() {
-            var spy = sinon.spy();
-            var stream = new IRCStream();
-
             stream.on('send', spy);
-
             stream.register({ nick: 'TestNick', username: 'TestUser', realname: 'TestReal' });
 
             sinon.assert.calledTwice(spy);
