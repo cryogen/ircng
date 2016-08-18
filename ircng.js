@@ -1,5 +1,3 @@
-'use strict';
-
 const EventEmitter = require('events');
 
 function parseMessage(line) {
@@ -37,7 +35,7 @@ function parseMessage(line) {
 }
 
 function isNumber(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
+    return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 function handleCommand(stream, command) {
@@ -53,7 +51,7 @@ function handleCommand(stream, command) {
             stream.emit('send', { message: 'PONG ' + command.args[0] + '\r\n' });
             break
         case 'JOIN':
-            stream.emit('join', { source: command.source, channel: command.args[0]} );
+            stream.emit('join', { source: command.source, channel: command.args[0] });
             break;
     }
 }
