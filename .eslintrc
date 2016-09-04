@@ -2,7 +2,7 @@
   "rules": {
     "indent": [2, 4, {"SwitchCase": 1}],
     "quotes": [1, "single"],
-    "strict": [1, "global"],
+    "strict": [0, "never"],
     "global-strict": 0,
     "brace-style": [2, "1tbs"],
     "no-cond-assign": [2],

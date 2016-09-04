@@ -1,3 +1,5 @@
+'use strict';
+
 const EventEmitter = require('events');
 
 function parseMessage(line) {
@@ -52,6 +54,15 @@ function handleCommand(stream, command) {
             break
         case 'JOIN':
             stream.emit('join', { source: command.source, channel: command.args[0] });
+            break;
+        case 'PRIVMSG':
+            stream.emit('privmsg', { source: command.source, target: command.args[0], message: command.args[1] });
+            break;
+        case 'NOTICE':
+            stream.emit('notice', { source: command.source, target: command.args[0], message: command.args[1] });
+            break;
+        case 'TOPIC':
+            stream.emit('topic', { source: command.source, channel: command.args[0], topic: command.args[1] });
             break;
     }
 }
