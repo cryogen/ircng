@@ -53,3 +53,24 @@ describe('calling joinChannel', function() {
         });
     });
 });
+
+describe('calling leaveChannel', function() {
+    describe('with no arguments', function() {
+        it('should send no messages', function() {
+            stream.on('send', spy);
+            stream.leaveChannel();
+
+            sinon.assert.notCalled(spy);
+        });
+    });
+
+    describe('with no leading #', function() {
+        it('should send a message to part the channel and add a # to the name', function() {
+            stream.on('send', spy);
+            stream.leaveChannel('test');
+
+            sinon.assert.calledOnce(spy);
+            expect(spy.getCall(0).args[0]).to.have.property('message').that.equals('PART #test\r\n');
+        });
+    });
+});

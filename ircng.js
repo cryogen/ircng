@@ -153,6 +153,18 @@ class IRCStream extends EventEmitter {
 
         this.emit('send', buildCommand('JOIN ' + channel));
     }
+
+    leaveChannel(channel) {
+        if(!channel) {
+            return;
+        }
+
+        if(!channel.startsWith('#')) {
+            channel = '#' + channel;
+        }
+
+        this.emit('send', buildCommand('PART ' + channel));
+    }
 }
 
 module.exports = IRCStream;
