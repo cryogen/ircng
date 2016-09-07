@@ -200,4 +200,13 @@ describe('Pushing a string', function() {
             expect(returnedCommand.args[0]).to.have.property('args').that.include('argument2 argument3');
         });
     });
+
+    describe('with a 2 multiline messages split over two pushes', function() {
+        it('should raise message events for each message', function() {
+            stream.push('COMMAND1 argument\r\nCOMMAND2 argument\r\nCOMMAND3');
+            stream.push(' argument\r\nCOMMAND4 argument\r\nCOMMAND5\r\n');
+
+            expect(spy.callCount).to.be.equals(5);
+        });
+    })
 });

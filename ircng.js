@@ -91,6 +91,7 @@ class IRCStream extends EventEmitter {
             var newLineIndex = buffer.indexOf('\n', currentIndex);
             
             if(newLineIndex === -1) {
+                this._buffer = buffer;
                 return;
             }
 
