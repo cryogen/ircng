@@ -92,3 +92,30 @@ describe('receiving a TOPIC message', function() {
         expect(returnedCommand.args[0]).to.have.property('topic').that.equals('testing testing');
     });
 });
+
+describe('receiving a PART message', function() {
+    it('should raise a part event', function() {
+        stream.on('part', spy);
+        stream.push(':nick!user@host PART #test :testing testing\r\n');
+
+        sinon.assert.calledOnce(spy);
+
+        var returnedCommand = spy.getCall(0);
+        expect(returnedCommand.args[0]).to.have.property('source').that.equals('nick!user@host');
+        expect(returnedCommand.args[0]).to.have.property('channel').that.equals('#test');
+        expect(returnedCommand.args[0]).to.have.property('message').that.equals('testing testing');
+    });
+});
+
+describe('receiving a QUIT message', function() {
+    it('should raise a quit event', function() {
+        stream.on('quit', spy);
+        stream.push(':nick!user@host QUIT :testing\r\n');
+
+        sinon.assert.calledOnce(spy);
+
+        var returnedCommand = spy.getCall(0);
+        expect(returnedCommand.args[0]).to.have.property('source').that.equals('nick!user@host');
+        expect(returnedCommand.args[0]).to.have.property('message').that.equals('testing');
+    });
+});

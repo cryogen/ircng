@@ -55,6 +55,9 @@ function handleCommand(stream, command) {
         case 'JOIN':
             stream.emit('join', { source: command.source, channel: command.args[0] });
             break;
+        case 'PART':
+            stream.emit('part', { source: command.source, channel: command.args[0], message: command.args[1] });
+            break;
         case 'PRIVMSG':
             stream.emit('privmsg', { source: command.source, target: command.args[0], message: command.args[1] });
             break;
@@ -63,6 +66,9 @@ function handleCommand(stream, command) {
             break;
         case 'TOPIC':
             stream.emit('topic', { source: command.source, channel: command.args[0], topic: command.args[1] });
+            break;
+        case 'QUIT':
+            stream.emit('quit', { source: command.source, message: command.args[0] });
             break;
     }
 }
