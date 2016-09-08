@@ -74,3 +74,33 @@ describe('calling leaveChannel', function() {
         });
     });
 });
+
+describe('calling sendMessage', function() {
+    describe('with no arguments', function() {
+        it('should send no messages', function() {
+            stream.on('send', spy);
+            stream.sendMessage();
+
+            sinon.assert.notCalled(spy);
+        });
+    });
+
+    describe('with no message', function() {
+        it('should send no messages', function() {
+            stream.on('send', spy);
+            stream.sendMessage('test');
+
+            sinon.assert.notCalled(spy);
+        });
+    });
+
+    describe('with a target and a message', function() {
+        it('should send a message to the target', function() {
+            stream.on('send', spy);
+            stream.sendMessage('#test', 'test message');
+
+            sinon.assert.calledOnce(spy);
+            expect(spy.getCall(0).args[0]).to.have.property('message').that.equals('PRIVMSG #test :test message\r\n');
+        });
+    });
+});

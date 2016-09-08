@@ -165,6 +165,14 @@ class IRCStream extends EventEmitter {
 
         this.emit('send', buildCommand('PART ' + channel));
     }
+
+    sendMessage(target, message) {
+        if(!target || !message) {
+            return;
+        }
+        
+        this.emit('send', buildCommand('PRIVMSG ' + target + ' :' + message));
+    }
 }
 
 module.exports = IRCStream;
