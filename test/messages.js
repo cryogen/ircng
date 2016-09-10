@@ -43,6 +43,7 @@ describe('receiving a numeric message', function() {
 
         var numeric = numericSpy.getCall(0);
         expect(numeric.args[0]).to.have.property('number').that.equals('433');
+        expect(numeric.args[0]).to.have.property('args').not.that.includes('*');
         expect(numeric.args[0]).to.have.property('args').that.includes('target');
         expect(numeric.args[0]).to.have.property('args').that.includes('Error stuff');
     });
