@@ -25,16 +25,26 @@ describe('receiving a PING message', function() {
 });
 
 describe('receiving a numeric message', function() {
-    it('should raise an event with the numeric', function() {
+    it('should raise an event with the numeric and a generic numeric event', function() {
+        var numericSpy = sinon.spy();
+
         stream.on('433', spy);
+        stream.on('numeric', numericSpy);
+
         stream.push(':source 433 * target :Error stuff\r\n');
 
         sinon.assert.calledOnce(spy);
+        sinon.assert.calledOnce(numericSpy);
 
         var returnedCommand = spy.getCall(0);
         expect(returnedCommand.args[0]).to.have.property('numeric').that.equals('433');
         expect(returnedCommand.args[0]).to.have.property('args').that.include('target');
         expect(returnedCommand.args[0]).to.have.property('args').that.include('Error stuff');
+
+        var numeric = numericSpy.getCall(0);
+        expect(numeric.args[0]).to.have.property('number').that.equals('433');
+        expect(numeric.args[0]).to.have.property('args').that.includes('target');
+        expect(numeric.args[0]).to.have.property('args').that.includes('Error stuff');
     });
 });
 

@@ -23,5 +23,17 @@ stream.on('message', function(message) {
     // Do stuff with irc messages
 });
 
+stream.on('privmsg', function(message) {
+    // handle private messages
+});
+
+stream.on('numeric', function(message) {
+    // handle numerics (they also raise individual messages eg on('001')
+})
+
+stream.joinChannel('test'); // join #test
+stream.leaveChannel('test'); // leave/part #test
+stream.sendMessage('#test', 'testing'); // send a privmsg to channel or nickname
+
 stream.push('SOME IRC DATA');
 ```

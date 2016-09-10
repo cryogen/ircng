@@ -46,6 +46,8 @@ function handleCommand(stream, command) {
             numeric: command.command, 
             args: command.args 
         });
+
+        stream.emit('numeric', { number: command.command, args: command.args });
     }
 
     switch(command.command) {
