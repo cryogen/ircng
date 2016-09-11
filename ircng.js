@@ -42,9 +42,9 @@ function isNumber(n) {
 
 function handleCommand(stream, command) {
     if(isNumber(command.command)) {
-        stream.emit(command.command, { 
-            numeric: command.command, 
-            args: command.args 
+        stream.emit(command.command, {
+            numeric: command.command,
+            args: command.args
         });
 
         stream.emit('numeric', { number: command.command, args: command.args.slice(1) });
@@ -72,6 +72,8 @@ function handleCommand(stream, command) {
         case 'QUIT':
             stream.emit('quit', { source: command.source, message: command.args[0] });
             break;
+        case 'NICK':
+            stream.emit('nick', { source: command.source, newnick: command.args[0] });
     }
 }
 
@@ -97,7 +99,7 @@ class IRCStream extends EventEmitter {
 
         while(currentIndex <= buffer.length) {
             var newLineIndex = buffer.indexOf('\n', currentIndex);
-            
+
             if(newLineIndex === -1) {
                 this._buffer = buffer;
                 return;
@@ -172,7 +174,7 @@ class IRCStream extends EventEmitter {
         if(!target || !message) {
             return;
         }
-        
+
         this.emit('send', buildCommand('PRIVMSG ' + target + ' :' + message));
     }
 }

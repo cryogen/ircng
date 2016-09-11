@@ -21,14 +21,27 @@ stream.register({
 
 stream.on('message', function(message) {
     // Do stuff with irc messages
+    // message.source - who sent the message
+    // message.args
 });
 
 stream.on('privmsg', function(message) {
+    // message.message
     // handle private messages
 });
 
 stream.on('numeric', function(message) {
     // handle numerics (they also raise individual messages eg on('001')
+    // message.args
+});
+
+stream.on('quit', function(message) {
+    // message.message - quit message
+});
+
+stream.on('nick', function(message) {
+    // message.newnick
+    // someone changed nickname
 })
 
 stream.joinChannel('test'); // join #test

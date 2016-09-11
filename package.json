@@ -19,8 +19,11 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
+    "babel-eslint": "^6.1.2",
     "browserify": "^13.1.0",
     "chai": "^3.5.0",
+    "eslint": "^3.5.0",
+    "eslint-plugin-react": "^6.2.0",
     "mocha": "^3.0.2",
     "sinon": "^1.17.5",
     "sinon-mongoose": "^1.2.1"

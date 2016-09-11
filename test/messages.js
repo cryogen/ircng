@@ -130,3 +130,16 @@ describe('receiving a QUIT message', function() {
         expect(returnedCommand.args[0]).to.have.property('message').that.equals('testing');
     });
 });
+
+describe('receiving a NICK message', function() {
+    it('should raise a nick event', function() {
+        stream.on('nick', spy);
+        stream.push(':nick!user@host NICK :newnick\r\n');
+
+        sinon.assert.calledOnce(spy);
+
+        var returnedCommand = spy.getCall(0);
+        expect(returnedCommand.args[0]).to.have.property('source').that.equals('nick!user@host');
+        expect(returnedCommand.args[0]).to.have.property('newnick').that.equals('newnick');
+    });
+});
