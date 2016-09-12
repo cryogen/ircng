@@ -1,3 +1,4 @@
+/*global describe, it, beforeEach */
 var sinon = require('sinon');
 var chai = require('chai');
 var expect = chai.expect;
@@ -25,7 +26,7 @@ describe('Calling register', function() {
         });
     });
 
-    describe('with arguments specified', function () {
+    describe('with arguments specified', function() {
         it('should register with specified details', function() {
             stream.on('send', spy);
             stream.register({ nick: 'TestNick', username: 'TestUser', realname: 'TestReal' });
@@ -35,5 +36,5 @@ describe('Calling register', function() {
             expect(spy.getCall(0).args[0]).to.have.property('message').that.equals('USER TestUser * * :TestReal\r\n');
             expect(spy.getCall(1).args[0]).to.have.property('message').that.equals('NICK TestNick\r\n');
         });
-    })
+    });
 });

@@ -1,3 +1,4 @@
+/*global describe, it, beforeEach */
 var sinon = require('sinon');
 var chai = require('chai');
 var expect = chai.expect;
@@ -57,7 +58,7 @@ describe('receiving a JOIN message', function() {
         sinon.assert.calledOnce(spy);
 
         var returnedCommand = spy.getCall(0);
-        expect(returnedCommand.args[0]).to.have.property('source').that.equals('nick!user@host');
+        expect(returnedCommand.args[0].source.nick).to.equals('nick');
         expect(returnedCommand.args[0]).to.have.property('channel').that.equals('#test');
     });
 });
@@ -70,7 +71,9 @@ describe('receiving a PRIVMSG message', function() {
         sinon.assert.calledOnce(spy);
 
         var returnedCommand = spy.getCall(0);
-        expect(returnedCommand.args[0]).to.have.property('source').that.equals('nick!user@host');
+        expect(returnedCommand.args[0].source.nick).to.equals('nick');
+        expect(returnedCommand.args[0].source.user).to.equals('user');
+        expect(returnedCommand.args[0].source.host).to.equals('host');
         expect(returnedCommand.args[0]).to.have.property('target').that.equals('#test');
         expect(returnedCommand.args[0]).to.have.property('message').that.equals('testing testing');
     });
@@ -84,7 +87,7 @@ describe('receiving a NOTICE message', function() {
         sinon.assert.calledOnce(spy);
 
         var returnedCommand = spy.getCall(0);
-        expect(returnedCommand.args[0]).to.have.property('source').that.equals('nick!user@host');
+        expect(returnedCommand.args[0].source.nick).to.equals('nick');
         expect(returnedCommand.args[0]).to.have.property('target').that.equals('#test');
         expect(returnedCommand.args[0]).to.have.property('message').that.equals('testing testing');
     });
@@ -98,7 +101,7 @@ describe('receiving a TOPIC message', function() {
         sinon.assert.calledOnce(spy);
 
         var returnedCommand = spy.getCall(0);
-        expect(returnedCommand.args[0]).to.have.property('source').that.equals('nick!user@host');
+        expect(returnedCommand.args[0].source.nick).to.equals('nick');
         expect(returnedCommand.args[0]).to.have.property('channel').that.equals('#test');
         expect(returnedCommand.args[0]).to.have.property('topic').that.equals('testing testing');
     });
@@ -112,7 +115,7 @@ describe('receiving a PART message', function() {
         sinon.assert.calledOnce(spy);
 
         var returnedCommand = spy.getCall(0);
-        expect(returnedCommand.args[0]).to.have.property('source').that.equals('nick!user@host');
+        expect(returnedCommand.args[0].source.nick).to.equals('nick');
         expect(returnedCommand.args[0]).to.have.property('channel').that.equals('#test');
         expect(returnedCommand.args[0]).to.have.property('message').that.equals('testing testing');
     });
@@ -126,7 +129,7 @@ describe('receiving a QUIT message', function() {
         sinon.assert.calledOnce(spy);
 
         var returnedCommand = spy.getCall(0);
-        expect(returnedCommand.args[0]).to.have.property('source').that.equals('nick!user@host');
+        expect(returnedCommand.args[0].source.nick).to.equals('nick');
         expect(returnedCommand.args[0]).to.have.property('message').that.equals('testing');
     });
 });
@@ -139,7 +142,7 @@ describe('receiving a NICK message', function() {
         sinon.assert.calledOnce(spy);
 
         var returnedCommand = spy.getCall(0);
-        expect(returnedCommand.args[0]).to.have.property('source').that.equals('nick!user@host');
+        expect(returnedCommand.args[0].source.nick).to.equals('nick');
         expect(returnedCommand.args[0]).to.have.property('newnick').that.equals('newnick');
     });
 });

@@ -26,6 +26,7 @@ stream.on('message', function(message) {
 });
 
 stream.on('privmsg', function(message) {
+    // message.source.nick, message.source.user, message.source.host
     // message.message
     // handle private messages
 });

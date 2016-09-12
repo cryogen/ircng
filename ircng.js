@@ -40,6 +40,17 @@ function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
+function parseSource(source) {
+    var nickIndex = source.indexOf('!');
+    var nick = source.substr(0, nickIndex);
+
+    var userIndex = source.indexOf('@', nickIndex);
+    var user = source.substr(nickIndex + 1, userIndex - nickIndex - 1);
+    var host = source.substr(userIndex + 1);
+
+    return { nick: nick, user: user, host: host };
+}
+
 function handleCommand(stream, command) {
     if(isNumber(command.command)) {
         stream.emit(command.command, {
@@ -53,27 +64,27 @@ function handleCommand(stream, command) {
     switch(command.command) {
         case 'PING':
             stream.emit('send', { message: 'PONG ' + command.args[0] + '\r\n' });
-            break
+            break;
         case 'JOIN':
-            stream.emit('join', { source: command.source, channel: command.args[0] });
+            stream.emit('join', { source: parseSource(command.source), channel: command.args[0] });
             break;
         case 'PART':
-            stream.emit('part', { source: command.source, channel: command.args[0], message: command.args[1] });
+            stream.emit('part', { source: parseSource(command.source), channel: command.args[0], message: command.args[1] });
             break;
         case 'PRIVMSG':
-            stream.emit('privmsg', { source: command.source, target: command.args[0], message: command.args[1] });
+            stream.emit('privmsg', { source: parseSource(command.source), target: command.args[0], message: command.args[1] });
             break;
         case 'NOTICE':
-            stream.emit('notice', { source: command.source, target: command.args[0], message: command.args[1] });
+            stream.emit('notice', { source: parseSource(command.source), target: command.args[0], message: command.args[1] });
             break;
         case 'TOPIC':
-            stream.emit('topic', { source: command.source, channel: command.args[0], topic: command.args[1] });
+            stream.emit('topic', { source: parseSource(command.source), channel: command.args[0], topic: command.args[1] });
             break;
         case 'QUIT':
-            stream.emit('quit', { source: command.source, message: command.args[0] });
+            stream.emit('quit', { source: parseSource(command.source), message: command.args[0] });
             break;
         case 'NICK':
-            stream.emit('nick', { source: command.source, newnick: command.args[0] });
+            stream.emit('nick', { source: parseSource(command.source), newnick: command.args[0] });
     }
 }
 
