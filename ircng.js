@@ -190,7 +190,7 @@ class IRCStream extends EventEmitter {
     }
 
     quit(message) {
-        this.emit('send', buildCommand('QUIT ' + message));
+        this.emit('send', buildCommand('QUIT :' + (message || '')));
     }
 }
 

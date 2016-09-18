@@ -105,3 +105,25 @@ describe('calling sendMessage', function() {
         });
     });
 });
+
+describe('calling quit', function() {
+    describe('with no arguments', function() {
+        it('should send a QUIT command with a blank message', function() {
+            stream.on('send', spy);
+            stream.quit();
+
+            sinon.assert.calledOnce(spy);
+            expect(spy.getCall(0).args[0]).to.have.property('message').that.equals('QUIT :\r\n');
+        });
+    });
+
+    describe('with an argument', function() {
+        it('should send a QUIT command with the message', function() {
+            stream.on('send', spy);
+            stream.quit('testing quit');
+
+            sinon.assert.calledOnce(spy);
+            expect(spy.getCall(0).args[0]).to.have.property('message').that.equals('QUIT :testing quit\r\n');
+        });
+    });
+});
