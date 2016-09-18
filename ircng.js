@@ -188,6 +188,10 @@ class IRCStream extends EventEmitter {
 
         this.emit('send', buildCommand('PRIVMSG ' + target + ' :' + message));
     }
+
+    quit(message) {
+        this.emit('send', buildCommand('QUIT ' + message));
+    }
 }
 
 module.exports = IRCStream;
