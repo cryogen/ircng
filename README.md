@@ -48,6 +48,7 @@ stream.on('nick', function(message) {
 stream.joinChannel('test'); // join #test
 stream.leaveChannel('test'); // leave/part #test
 stream.sendMessage('#test', 'testing'); // send a privmsg to channel or nickname
+stream.quit(message); // sends a QUIT command
 
 stream.push('SOME IRC DATA');
 ```
